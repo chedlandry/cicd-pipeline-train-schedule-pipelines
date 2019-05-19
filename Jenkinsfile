@@ -19,7 +19,7 @@ pipeline {
                                 failOnError: true,
                                 continueOnError: false,
                                 publishers:  [
-                                        sshPublishConn(
+                                        (
                                         configName: 'staging',
                                         sshCredentials: [
                                                 username: "$USERNAME",
