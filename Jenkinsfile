@@ -9,5 +9,39 @@ pipeline {
             }
         
         }
+        stage ('DeploytoStaging') {
+            when {
+                branch 'master'
+            }
+            steps {
+               withCredentials([usernameColonPassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                   sshPublisher {
+                        failOnError :true,
+                        continueOnError : false,
+                        publishers:[
+                            configName: 'staging' ,
+                            sshCredentials [
+                                username: "$USERNAME",
+                                encryptedPassphrase: "$USERPASS"
+                            ],
+                            transfers:[
+                                sshTransfer(
+                                sourceFiles: 'dist/trainSchedule.zip',
+                                removePrefix: 'dist/'
+                                remoteDirectory: '/tmp'
+                                execCommand: 'sudo systemctl stop train-schedule && rm -rf /opt/train-schedule && unzip /tmp/trainSchedule.zip -d /opt/train-schedule/ && sudo systemctl start train-schedule' 
+                            )]
+                            
+                            
+                            
+                            ]
+                        }
+                    
+                 }
+              
+            }
+        
+        }
+        
     }
 }
