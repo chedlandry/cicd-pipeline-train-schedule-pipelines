@@ -10,21 +10,19 @@ pipeline {
         
         }
         stage ('DeployStaging') {
-            
             when {
                 branch 'master'
             }
-            
             steps {
                 withCredentials{[usernamePassword(credentialsId:'webserver_login',usernameVariable:'USERNAME',passwordVariable:'USERPASS')]} {
-                    sshPublisher{
+                    sshPublisher: {
                                 failOnError: true,
                                 continueOnError: false,     
                                 publishers: [
                                         configName: 'staging',
                                         sshCredentials: [
-                                                username: '$USERNAME',
-                                                encryptedPassphrase: '$USERPASS',
+                                                username: "$USERNAME",
+                                                encryptedPassphrase: "$USERPASS",
                                         ],
                                 transfers: [
                                         sshTransfer(
