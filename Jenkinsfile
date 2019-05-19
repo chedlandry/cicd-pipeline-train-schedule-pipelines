@@ -17,21 +17,24 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId:'webserver_login',usernameVariable:'USERNAME',passwordVariable:'USERPASS')]) {
                     sshPublisher(
                                 failOnError: true,
-                                continueOnError: false,     
-                                publishers: [
+                                continueOnError: false,
+                                sshPublishConn(
+                                publishers:  [
                                         configName: 'staging',
                                         sshCredentials: [
                                                 username: "$USERNAME",
                                                 encryptedPassphrase: "$USERPASS",
                                         ],
-                                transfers: [
+                                transfers:    [
                                         sshTransfer(
                                         sourceFiles: 'dist/trainSchedule.zip',
                                         removePrefix: 'dist/',
                                         remoteDirectory: '/tmp',
                                         execCommand: 'sudo systemctl stop train-schedule && rm -rf /opt/train-schedule/* && unzip /tmp/trainSchedule.zip -d /opt/train-schedule/ && sudo systemctl start train-schedule'    
-                                        )]
-                                ]           
+                                                )
+                                              ]
+                                            ]
+                                    )
                     )
                 }
             }
