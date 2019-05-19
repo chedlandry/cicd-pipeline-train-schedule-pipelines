@@ -18,8 +18,8 @@ pipeline {
                     sshPublisher(
                                 failOnError: true,
                                 continueOnError: false,
-                                sshPublishConn(
                                 publishers:  [
+                                        sshPublishConn(
                                         configName: 'staging',
                                         sshCredentials: [
                                                 username: "$USERNAME",
@@ -33,8 +33,8 @@ pipeline {
                                         execCommand: 'sudo systemctl stop train-schedule && rm -rf /opt/train-schedule/* && unzip /tmp/trainSchedule.zip -d /opt/train-schedule/ && sudo systemctl start train-schedule'    
                                                 )
                                               ]
-                                            ]
-                                    )
+                                         )   
+                                    ]
                     )
                 }
             }
