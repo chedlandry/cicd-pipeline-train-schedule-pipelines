@@ -38,8 +38,7 @@ pipeline {
                 }
             }
     }
-        
-}
+
               stage ('DeployProduction') {
             when {
                 branch 'master'
